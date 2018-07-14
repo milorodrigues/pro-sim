@@ -22,7 +22,8 @@ public class Window_Start_PageSwap extends Window_Start {
 		btnFIFO = new JButton("FIFO");
 			btnFIFO.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					System.algPageSwap = "FIFO";
+					Manager.algPageSwap = "FIFO";
+					Manager.startProgram();
 					dispose();
 				}
 			});
@@ -30,7 +31,8 @@ public class Window_Start_PageSwap extends Window_Start {
 		btnLRU = new JButton("LRU");
 			btnLRU.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					System.algPageSwap = "LRU";
+					Manager.algPageSwap = "LRU";
+					Manager.startProgram();
 					dispose();
 				}
 			});
