@@ -34,4 +34,13 @@ public class Scheduler {
 	
 	public void updateCurrent() {
 	}
+	
+	public void updateCurrentQuantum() {
+	}
+	
+	public void updateCurrentOverload() {
+	}
+	
+	public void updateCurrentNext() {
+	}
 }

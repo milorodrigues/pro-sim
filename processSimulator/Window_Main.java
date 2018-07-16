@@ -111,9 +111,9 @@ public class Window_Main extends Window_Mother {
 		processTableRefreshData();
 		
 		if (Manager.scheduler.current == null) {
-			panelCPU.refreshPid("---");
+			panelCPU.refreshPanel("---");
 		} else {
-			panelCPU.refreshPid(Integer.toString(Manager.scheduler.current.pid));
+			panelCPU.refreshPanel(Integer.toString(Manager.scheduler.current.pid));
 		}
 		Window_Main.this.repaint();
 	}

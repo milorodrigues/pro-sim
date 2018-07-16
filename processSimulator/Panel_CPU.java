@@ -19,6 +19,7 @@ public class Panel_CPU extends JPanel {
 	
 	private JLabel lblCpu;
 	private JLabel lblPid;
+	private JLabel lblOverloading;
 	private JPanel panelPid;
 
 	public Panel_CPU() {
@@ -48,14 +49,29 @@ public class Panel_CPU extends JPanel {
 				
 			add(panelPid);
 			
-		add(Box.createVerticalStrut(20));
+		add(Box.createVerticalStrut(10));
+			
+		lblOverloading = new JLabel("Overloading!");
+			lblOverloading.setAlignmentX(Component.CENTER_ALIGNMENT);
+			lblOverloading.setVisible(false);
+			add(lblOverloading);
+			
+		add(Box.createVerticalStrut(10));
 		this.setMaximumSize(new Dimension(200, 300));
 		this.setMinimumSize(new Dimension(200, 300));
+	
 	}
 	
-	public void refreshPid(String current) {
-		lblPid.setText(current);
+	public void refreshPanel(String current) {
+		
+		if (Manager.inQuantum == false) {
+			lblOverloading.setVisible(true);
+			lblPid.setText("---");
+		} else {
+			lblOverloading.setVisible(false);
+			lblPid.setText(current);
+		}
+		
 		repaint();
 	}
-
 }

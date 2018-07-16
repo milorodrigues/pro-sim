@@ -1,24 +1,25 @@
 package processSimulator;
 
+import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.PriorityQueue;
 import java.util.Vector;
 
-public class Scheduler_FIFO extends Scheduler {
+public class Scheduler_EDF extends Scheduler{
 	
-	private static Queue<Process> queue;
-	
-	public Scheduler_FIFO() {
+	private Comparator<Process> comparator = new DeadlineComparator();
+	private static PriorityQueue<Process> queue;
+
+	public Scheduler_EDF() {
 		super();
-		queue = new LinkedList<Process>();
+		queue = new PriorityQueue<Process>(10, comparator);
 	}
 	
 	public boolean addProcess(int duration, int deadline, int priority, int delay) {
 		
-		Process newprocess = new Process(this.generatePID(), duration, 0, 0, delay);
+		Process newprocess = new Process(this.generatePID(), duration, (Manager.time + deadline), 0, delay);
 		
-		boolean success = queue.add(newprocess); 
+		boolean success = queue.add(newprocess);
 		if (success) {
 			this.increaseLastPID();
 		}
@@ -30,26 +31,34 @@ public class Scheduler_FIFO extends Scheduler {
 	
 	public void updateCurrentQuantum() {
 		if (current == null) {
-			//System.out.println("current = null");
-			current = queue.poll();
-			if (current != null) {
-				current.timeleft--;
-				//System.out.println("current = " + current.duration);
-			}
-		}
-		else if (current.timeleft <= 0) {
-			current = queue.poll();
-			//System.out.println("current ended");
-			updateCurrent();
-		}
-		else {
+			Manager.inQuantum = true;
+			Manager.roundQuantum = Manager.quantum;
+			updateCurrentNext();
+		} else if (current.timeleft <= 0) {
+			updateCurrentNext();
+		} else {
 			current.timeleft--;
-			//System.out.println("current = " + current.duration);
+		}
+	}
+	
+	public void updateCurrentOverload() {
+		if (Manager.overload == Manager.roundOverload) {
+			if (current != null) {
+				queue.add(current);
+			}
+			current = queue.poll();
+		}
+	}
+	
+	public void updateCurrentNext() {
+		current = queue.poll();
+		if (current != null) {
+			updateCurrentQuantum();
 		}
 	}
 	
 	public Object[][] getProcessData(){
-			
+		
 		Vector<Vector<Object>> dataVec = new Vector<Vector<Object>>(10, 10);
 		Vector<Object> row = new Vector<Object>(5, 0);
 		
@@ -73,4 +82,12 @@ public class Scheduler_FIFO extends Scheduler {
 		return dataArray;
 	}
 
+	public class DeadlineComparator implements Comparator<Process>{
+
+		@Override
+		public int compare(Process A, Process B) {
+			return A.deadline - B.deadline;
+		}
+		
+	}
 }

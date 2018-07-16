@@ -81,18 +81,28 @@ public class Window_CreateProcess extends Window_Mother {
 			btnCreate.setAlignmentX(CENTER_ALIGNMENT);
 			btnCreate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (Manager.algScheduling == "FIFO" || Manager.algScheduling == "SJF") {
+					if (Manager.algScheduling == "FIFO" || Manager.algScheduling == "SJF" || Manager.algScheduling == "RR") {
 						try {
-							Manager.scheduler.addProcess(Integer.parseInt(fieldDuration.getText()), -1, -1, Integer.parseInt(fieldEntryDelay.getText()));
+							if (!Manager.scheduler.addProcess(Integer.parseInt(fieldDuration.getText()), -1, -1, Integer.parseInt(fieldEntryDelay.getText()))) {
+								JOptionPane.showMessageDialog(null, "Error creating process");
+							}
 						} catch(NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid input: " + nfe.getMessage());
 							new Window_CreateProcess();
 						} finally {
 							dispose();
 						}
-					} else {
-						JOptionPane.showMessageDialog(null, "Scheduling algorithm not implemented yet");
-						dispose();
+					} else if (Manager.algScheduling == "EDF") {
+						try {
+							if (!Manager.scheduler.addProcess(Integer.parseInt(fieldDuration.getText()), Integer.parseInt(fieldDeadline.getText()), -1, Integer.parseInt(fieldEntryDelay.getText()))) {
+								JOptionPane.showMessageDialog(null, "Error creating process");
+							}
+						} catch(NumberFormatException nfe) {
+							JOptionPane.showMessageDialog(null, "Invalid input: " + nfe.getMessage());
+							new Window_CreateProcess();
+						} finally {
+							dispose();
+						}
 					}
 				}
 			});

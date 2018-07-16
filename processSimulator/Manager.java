@@ -18,8 +18,8 @@ public class Manager {
 	public static String timestr = timeformat.format(time);	
 	public static Timer timer;
 	
-	public static int quantum = 1;
-	public static int overload = 1;
+	public static int quantum = 0; public static int roundQuantum; public static boolean inQuantum = true;
+	public static int overload = 0; public static int roundOverload;
 	
 	public static Scheduler scheduler;
 	public static PageSwapper swapper;
@@ -40,6 +40,14 @@ public class Manager {
 			scheduler = new Scheduler_FIFO();
 		} else if (algScheduling == "SJF") {
 			scheduler = new Scheduler_SJF();
+		} else if (algScheduling == "RR") {
+			scheduler = new Scheduler_RR();
+			roundQuantum = quantum; inQuantum = true;
+			roundOverload = overload;
+		} else if (algScheduling == "EDF") {
+			scheduler = new Scheduler_EDF();
+			roundQuantum = quantum; inQuantum = true;
+			roundOverload = overload;
 		} else {
 			scheduler = new Scheduler();
 		}
@@ -48,11 +56,19 @@ public class Manager {
 		
 		mainWindow = new Window_Main();
 		
-		timer = new Timer(1000, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				runLoop();
-			}
-		});
+		if (algScheduling == "RR" || algScheduling == "EDF") {
+			timer = new Timer(1000, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					runLoopPreemptive();
+				}
+			});
+		} else {
+			timer = new Timer(1000, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					runLoop();
+				}
+			});
+		}
 		timer.setInitialDelay(1000);
 		timer.start();
 	}
@@ -61,6 +77,29 @@ public class Manager {
 			
 		time++; timestr = timeformat.format(time);
 		scheduler.updateCurrent();			
+		mainWindow.loopWindow();
+	}
+	
+	public static void runLoopPreemptive() {
+		
+		time++; timestr = timeformat.format(time);
+				
+		if (inQuantum) {
+			scheduler.updateCurrentQuantum();
+			roundQuantum--;
+			if (roundQuantum <= 0) {
+				roundOverload = overload;
+				inQuantum = false;
+			}
+		} else {
+			scheduler.updateCurrentOverload();
+			roundOverload--;
+			if (roundOverload <= 0) {
+				roundQuantum = quantum;
+				inQuantum = true;
+			}
+		}
+		
 		mainWindow.loopWindow();
 	}
 }

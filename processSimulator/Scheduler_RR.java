@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
 
-public class Scheduler_FIFO extends Scheduler {
-	
+public class Scheduler_RR extends Scheduler{
+
 	private static Queue<Process> queue;
 	
-	public Scheduler_FIFO() {
+	public Scheduler_RR() {
 		super();
 		queue = new LinkedList<Process>();
 	}
@@ -30,26 +30,34 @@ public class Scheduler_FIFO extends Scheduler {
 	
 	public void updateCurrentQuantum() {
 		if (current == null) {
-			//System.out.println("current = null");
-			current = queue.poll();
-			if (current != null) {
-				current.timeleft--;
-				//System.out.println("current = " + current.duration);
-			}
-		}
-		else if (current.timeleft <= 0) {
-			current = queue.poll();
-			//System.out.println("current ended");
-			updateCurrent();
-		}
-		else {
+			Manager.inQuantum = true;
+			Manager.roundQuantum = Manager.quantum;
+			updateCurrentNext();
+		} else if (current.timeleft <= 0) {
+			updateCurrentNext();
+		} else {
 			current.timeleft--;
-			//System.out.println("current = " + current.duration);
+		}
+	}
+	
+	public void updateCurrentOverload() {
+		if (Manager.overload == Manager.roundOverload) {
+			if (current != null) {
+				queue.add(current);
+			}
+			current = queue.poll();
+		}
+	}
+	
+	public void updateCurrentNext() {
+		current = queue.poll();
+		if (current != null) {
+			updateCurrentQuantum();
 		}
 	}
 	
 	public Object[][] getProcessData(){
-			
+		
 		Vector<Vector<Object>> dataVec = new Vector<Vector<Object>>(10, 10);
 		Vector<Object> row = new Vector<Object>(5, 0);
 		
