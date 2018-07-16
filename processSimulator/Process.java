@@ -11,7 +11,7 @@ public class Process {
 	public Process(int pid, int duration, int deadline, int priority, int delay) {
 		this.pid = pid;
 		this.duration = duration;
-		this.deadline = pid;
+		this.deadline = deadline;
 		this.priority = priority;
 		this.delay = delay;
 	}

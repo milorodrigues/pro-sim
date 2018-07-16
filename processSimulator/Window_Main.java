@@ -16,7 +16,7 @@ public class Window_Main extends Window_Mother {
 
 	private static final long serialVersionUID = 7219300308707987032L;
 	
-	private JPanel panelLabels;	
+	private JPanel panelRow1;	
 		private JLabel lblTimeTitle;
 		private JLabel lblTime;
 		private JLabel lblSchedulingTitle;
@@ -24,46 +24,52 @@ public class Window_Main extends Window_Mother {
 		private JLabel lblSwappingTitle;
 		private JLabel lblSwapping;
 	
-	private JPanel panelButtons;
+	private JPanel panelRow2;
 		private JButton btnNewProcess;
+	
+	private JPanel panelRow3;
+		private Table_Processes processTable;
+		private Panel_CPU panelCPU;
 		
 	public Window_Main() {
 		super();
 		
-		panelLabels = new JPanel();
-			panelLabels.setLayout(new BoxLayout(panelLabels, BoxLayout.X_AXIS));
+		processTable = new Table_Processes();
+		
+		panelRow1 = new JPanel();
+			panelRow1.setLayout(new BoxLayout(panelRow1, BoxLayout.X_AXIS));
 		
 			lblTimeTitle = new JLabel("Time:");
 				lblTimeTitle.setFont(new Font("Verdana", Font.BOLD, 12));
-				panelLabels.add(lblTimeTitle);
-				panelLabels.add(Box.createRigidArea(new Dimension(10,0)));
+				panelRow1.add(lblTimeTitle);
+				panelRow1.add(Box.createRigidArea(new Dimension(10,0)));
 				
 			lblTime = new JLabel(Manager.timestr);
 				lblTime.setFont(new Font("Verdana", Font.PLAIN, 12));
-				panelLabels.add(lblTime);
-				panelLabels.add(Box.createRigidArea(new Dimension(40,0)));
+				panelRow1.add(lblTime);
+				panelRow1.add(Box.createRigidArea(new Dimension(40,0)));
 			
 			lblSchedulingTitle = new JLabel("Scheduling algorithm:");
 				lblSchedulingTitle.setFont(new Font("Verdana", Font.BOLD, 12));
-				panelLabels.add(lblSchedulingTitle);
-				panelLabels.add(Box.createRigidArea(new Dimension(10,0)));
+				panelRow1.add(lblSchedulingTitle);
+				panelRow1.add(Box.createRigidArea(new Dimension(10,0)));
 				
 			lblScheduling = new JLabel(Manager.algScheduling);
 				lblScheduling.setFont(new Font("Verdana", Font.PLAIN, 12));
-				panelLabels.add(lblScheduling);
-				panelLabels.add(Box.createRigidArea(new Dimension(40,0)));
+				panelRow1.add(lblScheduling);
+				panelRow1.add(Box.createRigidArea(new Dimension(40,0)));
 				
 			lblSwappingTitle = new JLabel("Page swapping algorithm:");
 				lblSwappingTitle.setFont(new Font("Verdana", Font.BOLD, 12));
-				panelLabels.add(lblSwappingTitle);
-				panelLabels.add(Box.createRigidArea(new Dimension(10,0)));
+				panelRow1.add(lblSwappingTitle);
+				panelRow1.add(Box.createRigidArea(new Dimension(10,0)));
 				
 			lblSwapping = new JLabel(Manager.algPageSwap);
 				lblSwapping.setFont(new Font("Verdana", Font.PLAIN, 12));
-				panelLabels.add(lblSwapping);
+				panelRow1.add(lblSwapping);
 				
-		panelButtons = new JPanel();
-			panelButtons.setLayout(new BoxLayout(panelButtons, BoxLayout.X_AXIS));
+		panelRow2 = new JPanel();
+			panelRow2.setLayout(new BoxLayout(panelRow2, BoxLayout.X_AXIS));
 			
 			btnNewProcess = new JButton("Create process");
 				btnNewProcess.addActionListener(new ActionListener() {
@@ -71,20 +77,28 @@ public class Window_Main extends Window_Mother {
 						new Window_CreateProcess();
 					}
 				});
-				panelButtons.add(btnNewProcess);
+				panelRow2.add(btnNewProcess);
+				
+		panelRow3 = new JPanel();
+			panelRow3.setLayout(new BoxLayout(panelRow3, BoxLayout.X_AXIS));
+			
+			panelRow3.add(processTable);
+			panelRow3.add(Box.createHorizontalStrut(10));
+			
+			panelCPU = new Panel_CPU();
+			panelRow3.add(panelCPU);
 		
 		contentPane.add(Box.createVerticalStrut(5));
-		contentPane.add(panelLabels);
+		contentPane.add(panelRow1);
 		contentPane.add(Box.createVerticalStrut(5));
-		contentPane.add(panelButtons);		
+		contentPane.add(panelRow2);
+		contentPane.add(Box.createVerticalStrut(20));
+		contentPane.add(panelRow3);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(850,780);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
-		
-		//Manager.time++; Manager.timestr = Manager.timeformat.format(Manager.time);
-		//loopWindow();
 		
 	}
 	
@@ -93,7 +107,19 @@ public class Window_Main extends Window_Mother {
 		//JOptionPane.showMessageDialog(null, "in loopWindow()");
 		
 		lblTime.setText(Manager.timestr);
-		//Window_Main.this.repaint();
+		
+		processTableRefreshData();
+		
+		if (Manager.scheduler.current == null) {
+			panelCPU.refreshPid("---");
+		} else {
+			panelCPU.refreshPid(Integer.toString(Manager.scheduler.current.pid));
+		}
+		Window_Main.this.repaint();
+	}
+	
+	public void processTableRefreshData() {
+		processTable.model.refreshData();
 	}
 
 }

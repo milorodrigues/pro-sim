@@ -3,9 +3,11 @@ package processSimulator;
 public class Scheduler {
 	
 	private static int lastPID;
+	public Process current;
 	
 	public Scheduler() {
-		lastPID = 0;		
+		lastPID = 0;
+		current = null;
 	}
 	
 	public int generatePID() {
@@ -17,9 +19,18 @@ public class Scheduler {
 		lastPID++;
 	}
 	
-	public boolean addProcess(int pid, int duration, int deadline, int priority, int delay) {
+	public boolean addProcess(int duration, int deadline, int priority, int delay) {
 		
 		return false;
 	}
-
+	
+	public Object[][] getProcessData(){
+		
+		Object[][] dataArray = {};
+		
+		return dataArray;
+	}
+	
+	public void updateCurrent() {
+	}
 }

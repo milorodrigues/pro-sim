@@ -8,6 +8,8 @@ import javax.swing.Timer;
 
 public class Manager {
 	
+	public static Utility utility = new Utility();
+	
 	public static String algScheduling = "null";
 	public static String algPageSwap = "null";
 	
@@ -54,7 +56,9 @@ public class Manager {
 	}
 	
 	public static void runLoop(){		
-			time++; timestr = timeformat.format(time);
-			mainWindow.loopWindow();
+			
+		time++; timestr = timeformat.format(time);
+		scheduler.updateCurrent();			
+		mainWindow.loopWindow();
 	}
 }

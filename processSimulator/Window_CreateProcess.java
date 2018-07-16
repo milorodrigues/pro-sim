@@ -83,9 +83,10 @@ public class Window_CreateProcess extends Window_Mother {
 				public void actionPerformed(ActionEvent e) {
 					if (Manager.algScheduling == "FIFO") {
 						try {
-							Manager.scheduler.addProcess(-1, Integer.parseInt(fieldDuration.getText()), -1, -1, Integer.parseInt(fieldEntryDelay.getText()));
+							Manager.scheduler.addProcess(Integer.parseInt(fieldDuration.getText()), -1, -1, Integer.parseInt(fieldEntryDelay.getText()));
 						} catch(NumberFormatException nfe) {
 							JOptionPane.showMessageDialog(null, "Invalid input: " + nfe.getMessage());
+							new Window_CreateProcess();
 						} finally {
 							dispose();
 						}
