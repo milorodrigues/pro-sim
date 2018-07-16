@@ -81,7 +81,7 @@ public class Window_CreateProcess extends Window_Mother {
 			btnCreate.setAlignmentX(CENTER_ALIGNMENT);
 			btnCreate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (Manager.algScheduling == "FIFO") {
+					if (Manager.algScheduling == "FIFO" || Manager.algScheduling == "SJF") {
 						try {
 							Manager.scheduler.addProcess(Integer.parseInt(fieldDuration.getText()), -1, -1, Integer.parseInt(fieldEntryDelay.getText()));
 						} catch(NumberFormatException nfe) {

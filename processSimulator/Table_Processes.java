@@ -33,7 +33,7 @@ public class Table_Processes extends JPanel{
 
 		private static final long serialVersionUID = -7264052063418155379L;
 		
-		private String[] columnNames = {"Process ID", "Duration left", "Deadline", "Priority"};
+		private String[] columnNames = {"Process ID", "Duration", "Time left", "Deadline", "Priority"};
 		private Object[][] data = Manager.scheduler.getProcessData();
 		
 		public void refreshData() {

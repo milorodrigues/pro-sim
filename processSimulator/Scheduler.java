@@ -1,8 +1,9 @@
 package processSimulator;
 
+
 public class Scheduler {
 	
-	private static int lastPID;
+	protected static int lastPID;
 	public Process current;
 	
 	public Scheduler() {

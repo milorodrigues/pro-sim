@@ -38,6 +38,8 @@ public class Manager {
 		
 		if (algScheduling == "FIFO") {
 			scheduler = new Scheduler_FIFO();
+		} else if (algScheduling == "SJF") {
+			scheduler = new Scheduler_SJF();
 		} else {
 			scheduler = new Scheduler();
 		}
