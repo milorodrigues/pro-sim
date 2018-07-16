@@ -9,5 +9,5 @@ __To do, in order of importance:__
   4. Gantt chart to display execution over time
   5. Method to delete processes
 
-__Scheduling routines:__ FIFO, Shortest Job First, Round Robin and Earliest Deadline First
+__Scheduling routines:__ FIFO, Shortest Job First, Round Robin and Earliest Deadline First  
 __Page swapping algorithms:__ FIFO and Least Recently Used
