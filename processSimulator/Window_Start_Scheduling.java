@@ -124,7 +124,7 @@ public class Window_Start_Scheduling extends Window_Start {
 		quantumoverload.add(btnGo);
 		
 		contentPane.add(quantumoverload);
-		Window_Start_Scheduling.this.setSize(new Dimension(437,205));
+		Window_Start_Scheduling.this.setSize(new Dimension(437,225));
 		Window_Start_Scheduling.this.setLocationRelativeTo(null);
 	}
 	

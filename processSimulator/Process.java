@@ -2,12 +2,14 @@ package processSimulator;
 
 public class Process {
 	
-	protected int pid;
+	public int pid;
 	protected int duration;
 	protected int timeleft;
 	protected int deadline;
 	protected int priority;
 	protected int delay;
+	
+	public static int numPages = 10;
 	
 	public Process(int pid, int duration, int deadline, int priority, int delay) {
 		this.pid = pid;

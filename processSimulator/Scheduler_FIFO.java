@@ -12,39 +12,50 @@ public class Scheduler_FIFO extends Scheduler {
 	public Scheduler_FIFO() {
 		super();
 		queue = new LinkedList<Process>();
+		
+		add(1, 20, 0, 0, 0);
+		add(2, 18, 0, 0, 0);
+		add(3, 24, 0, 0, 0);
+		add(4, 16, 0, 0, 0);
+		add(5, 21, 0, 0, 0);
+		add(6, 11, 0, 0, 0);
+
 	}
 	
-	public boolean addProcess(int duration, int deadline, int priority, int delay) {
+	public String addProcess(int duration, int deadline, int priority, int delay) {
 		
 		Process newprocess = new Process(this.generatePID(), duration, 0, 0, delay);
 		
-		boolean success = queue.add(newprocess); 
-		if (success) {
-			this.increaseLastPID();
+		String result = "";
+		if (queue.size() >= limit) result = "full";
+		else {
+			boolean success = queue.add(newprocess);
+			if (success) {
+				this.increaseLastPID();
+				result = "ok";
+			} else {
+				result = "fail";
+			}
+			
+			Manager.mainWindow.processTableRefreshData();
 		}
 		
-		Manager.mainWindow.processTableRefreshData();
-		
-		return success;
+		return result;
 	}
 	
-	public void updateCurrentQuantum() {
-		if (current == null) {
-			//System.out.println("current = null");
-			current = queue.poll();
-			if (current != null) {
-				current.timeleft--;
-				//System.out.println("current = " + current.duration);
-			}
-		}
-		else if (current.timeleft <= 0) {
-			current = queue.poll();
-			//System.out.println("current ended");
-			updateCurrent();
-		}
-		else {
-			current.timeleft--;
-			//System.out.println("current = " + current.duration);
+	public void add(int pid, int duration, int deadline, int priority, int delay) {
+		
+		Process newprocess = new Process(pid, duration, 0, 0, delay);
+		
+		queue.add(newprocess); 
+		
+	}
+	
+	public void getNextProcess() {
+		current = queue.poll();
+		Manager.swapper.fetchPagesToDisk(current);
+		if (!Manager.swapper.checkPages(current)) {
+			Manager.swapper.fetchPages(current);
 		}
 	}
 	

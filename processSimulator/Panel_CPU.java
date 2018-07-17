@@ -20,6 +20,7 @@ public class Panel_CPU extends JPanel {
 	private JLabel lblCpu;
 	private JLabel lblPid;
 	private JLabel lblOverloading;
+	private JLabel lblPaused;
 	private JPanel panelPid;
 
 	public Panel_CPU() {
@@ -57,8 +58,16 @@ public class Panel_CPU extends JPanel {
 			add(lblOverloading);
 			
 		add(Box.createVerticalStrut(10));
-		this.setMaximumSize(new Dimension(200, 300));
-		this.setMinimumSize(new Dimension(200, 300));
+		
+		lblPaused = new JLabel("Execution paused");
+			//lblPaused.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+			lblPaused.setAlignmentX(Component.CENTER_ALIGNMENT);
+			lblPaused.setVisible(false);
+			add(lblPaused);
+		
+		this.setPreferredSize(new Dimension(200, 200));
+		this.setMaximumSize(new Dimension(200, 200));
+		this.setMinimumSize(new Dimension(200, 200));
 	
 	}
 	
@@ -73,5 +82,12 @@ public class Panel_CPU extends JPanel {
 		}
 		
 		repaint();
+	}
+	
+	public void pauseSwitch() {
+		
+		if (Manager.running) lblPaused.setVisible(false);
+		else lblPaused.setVisible(true);
+		
 	}
 }

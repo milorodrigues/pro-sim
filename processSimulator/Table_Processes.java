@@ -20,13 +20,12 @@ public class Table_Processes extends JPanel{
 		
 		model = new TableModel_Processes();
 		table = new JTable(model);
-		//table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
         table.setFillsViewportHeight(true);
 
         JScrollPane scrollPane = new JScrollPane(table);
 
         add(scrollPane);
-        this.setMaximumSize(new Dimension(600, 300));
 	}
 	
 	class TableModel_Processes extends AbstractTableModel{

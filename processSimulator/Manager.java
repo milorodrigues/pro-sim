@@ -18,6 +18,7 @@ public class Manager {
 	public static String timestr = timeformat.format(time);	
 	public static Timer timer;
 	
+	public static boolean running;
 	public static int quantum = 0; public static int roundQuantum; public static boolean inQuantum = true;
 	public static int overload = 0; public static int roundOverload;
 	
@@ -36,6 +37,8 @@ public class Manager {
 	
 	public static void startProgram() {
 		
+		running = true;
+		
 		if (algScheduling == "FIFO") {
 			scheduler = new Scheduler_FIFO();
 		} else if (algScheduling == "SJF") {
@@ -52,7 +55,13 @@ public class Manager {
 			scheduler = new Scheduler();
 		}
 		
-		swapper = new PageSwapper();
+		if (algPageSwap == "FIFO") {
+			swapper = new PageSwapper_FIFO();
+		} else if (algPageSwap == "LRU") {
+			swapper = new PageSwapper_LRU();
+		} else {
+			swapper = new PageSwapper();
+		}
 		
 		mainWindow = new Window_Main();
 		
@@ -88,18 +97,38 @@ public class Manager {
 			scheduler.updateCurrentQuantum();
 			roundQuantum--;
 			if (roundQuantum <= 0) {
-				roundOverload = overload;
-				inQuantum = false;
+				startOverload();
 			}
 		} else {
 			scheduler.updateCurrentOverload();
 			roundOverload--;
 			if (roundOverload <= 0) {
-				roundQuantum = quantum;
-				inQuantum = true;
+				startQuantum();
 			}
 		}
 		
 		mainWindow.loopWindow();
+	}
+	
+	public static void startQuantum() {
+		roundQuantum = quantum;
+		inQuantum = true;
+	}
+	
+	public static void startOverload() {
+		roundOverload = overload;
+		inQuantum = false;
+	}
+	
+	public static void timerSwitch() {
+		if (running) {
+			timer.stop();
+			running = false;
+		} else {
+			timer.start();
+			running = true;
+		}
+		
+		mainWindow.pauseSwitch();
 	}
 }
