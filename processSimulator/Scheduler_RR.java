@@ -12,31 +12,61 @@ public class Scheduler_RR extends Scheduler{
 	public Scheduler_RR() {
 		super();
 		queue = new LinkedList<Process>();
+		
+		add(1, 20, 0, 0, 0);
+		add(2, 18, 0, 0, 0);
+		add(3, 24, 0, 0, 0);
+		add(4, 16, 0, 0, 0);
+		add(5, 21, 0, 0, 0);
+		add(6, 11, 0, 0, 0);
 	}
 	
-	public boolean addProcess(int duration, int deadline, int priority, int delay) {
+	public String addProcess(int duration, int deadline, int priority, int delay) {
 		
 		Process newprocess = new Process(this.generatePID(), duration, 0, 0, delay);
 		
-		boolean success = queue.add(newprocess); 
-		if (success) {
-			this.increaseLastPID();
+		String result = "";
+		if (queue.size() >= limit) result = "full";
+		else {
+			boolean success = queue.add(newprocess);
+			if (success) {
+				this.increaseLastPID();
+				result = "ok";
+			} else {
+				result = "fail";
+			}
+			
+			Manager.mainWindow.processTableRefreshData();
 		}
 		
-		Manager.mainWindow.processTableRefreshData();
+		return result;
+	}
+	
+	public void add(int pid, int duration, int deadline, int priority, int delay) {
 		
-		return success;
+		Process newprocess = new Process(pid, duration, 0, 0, delay);
+		
+		queue.add(newprocess); 
+		
 	}
 	
 	public void updateCurrentQuantum() {
 		if (current == null) {
-			Manager.inQuantum = true;
-			Manager.roundQuantum = Manager.quantum;
-			updateCurrentNext();
-		} else if (current.timeleft <= 0) {
-			updateCurrentNext();
+			Manager.startQuantum();
+			current = queue.poll();
+			Manager.swapper.fetchPagesToDisk(current);
+			if (current != null) {
+				updateCurrentQuantum();
+			}
 		} else {
+			Manager.swapper.fetchPages(current);			
 			current.timeleft--;
+			Manager.swapper.pageLoop(current);
+			
+			if (current.timeleft <= 0) {
+				endCurrentProcess();
+				Manager.startOverload();
+			}
 		}
 	}
 	
@@ -46,13 +76,8 @@ public class Scheduler_RR extends Scheduler{
 				queue.add(current);
 			}
 			current = queue.poll();
-		}
-	}
-	
-	public void updateCurrentNext() {
-		current = queue.poll();
-		if (current != null) {
-			updateCurrentQuantum();
+			Manager.swapper.fetchPagesToDisk(current);
+			Manager.swapper.fetchPages(current);
 		}
 	}
 	

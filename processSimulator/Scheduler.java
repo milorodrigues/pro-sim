@@ -4,6 +4,7 @@ package processSimulator;
 public class Scheduler {
 	
 	protected static int lastPID;
+	public static int limit = 10;
 	public Process current;
 	
 	public Scheduler() {
@@ -20,9 +21,9 @@ public class Scheduler {
 		lastPID++;
 	}
 	
-	public boolean addProcess(int duration, int deadline, int priority, int delay) {
+	public String addProcess(int duration, int deadline, int priority, int delay) {
 		
-		return false;
+		return "fail";
 	}
 	
 	public Object[][] getProcessData(){
@@ -33,6 +34,26 @@ public class Scheduler {
 	}
 	
 	public void updateCurrent() {
+		if (current == null) {
+			getNextProcess();
+		}
+		
+		if (current != null) {
+			if (current.timeleft <= 0) {
+				endCurrentProcess();
+			}
+			current.timeleft--;
+			Manager.swapper.pageLoop(current);
+		}
+	}
+	
+	public void getNextProcess() {
+		current = null;
+	}
+	
+	public void endCurrentProcess() {
+		Manager.swapper.clearPagesFromDisk(current);
+		getNextProcess();
 	}
 	
 	public void updateCurrentQuantum() {

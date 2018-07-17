@@ -13,31 +13,64 @@ public class Scheduler_EDF extends Scheduler{
 	public Scheduler_EDF() {
 		super();
 		queue = new PriorityQueue<Process>(10, comparator);
+		
+
+		add(1, 20, 40, 0, 0);
+		add(2, 18, 36, 0, 0);
+		add(3, 24, 48, 0, 0);
+		add(4, 16, 32, 0, 0);
+		add(5, 21, 42, 0, 0);
+		add(6, 11, 22, 0, 0);
+
 	}
 	
-	public boolean addProcess(int duration, int deadline, int priority, int delay) {
+	public String addProcess(int duration, int deadline, int priority, int delay) {
 		
 		Process newprocess = new Process(this.generatePID(), duration, (Manager.time + deadline), 0, delay);
 		
-		boolean success = queue.add(newprocess);
-		if (success) {
-			this.increaseLastPID();
+		String result = "";
+		if (queue.size() >= limit) result = "full";
+		else {
+			boolean success = queue.add(newprocess);
+			if (success) {
+				this.increaseLastPID();
+				result = "ok";
+			} else {
+				result = "fail";
+			}
+			
+			Manager.mainWindow.processTableRefreshData();
 		}
 		
-		Manager.mainWindow.processTableRefreshData();
+		return result;
+	}
+	
+	public void add(int pid, int duration, int deadline, int priority, int delay) {
 		
-		return success;
+		Process newprocess = new Process(pid, duration, (Manager.time + deadline), 0, delay);
+		
+		queue.add(newprocess); 
+		
 	}
 	
 	public void updateCurrentQuantum() {
 		if (current == null) {
-			Manager.inQuantum = true;
-			Manager.roundQuantum = Manager.quantum;
-			updateCurrentNext();
-		} else if (current.timeleft <= 0) {
-			updateCurrentNext();
+			Manager.startQuantum();
+			current = queue.poll();
+			Manager.swapper.fetchPagesToDisk(current);
+			if (current != null) {
+				updateCurrentQuantum();			
+			}
 		} else {
+			Manager.swapper.fetchPages(current);
+			
 			current.timeleft--;
+			Manager.swapper.pageLoop(current);
+			
+			if (current.timeleft <= 0) {
+				endCurrentProcess();
+				Manager.startOverload();
+			}
 		}
 	}
 	
@@ -47,13 +80,8 @@ public class Scheduler_EDF extends Scheduler{
 				queue.add(current);
 			}
 			current = queue.poll();
-		}
-	}
-	
-	public void updateCurrentNext() {
-		current = queue.poll();
-		if (current != null) {
-			updateCurrentQuantum();
+			Manager.swapper.fetchPagesToDisk(current);
+			Manager.swapper.fetchPages(current);
 		}
 	}
 	
