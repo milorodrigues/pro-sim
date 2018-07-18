@@ -38,10 +38,14 @@ public class Window_Main extends Window_Mother {
 	private JPanel panelRow4;
 		private Panel_Disk panelDisk;
 		
+	private JPanel panelRow5;
+		private Panel_Gantt panelGantt;
+		
 	public Window_Main() {
 		super();
 		
 		processTable = new Table_Processes();
+		panelGantt = new Panel_Gantt();
 		
 		contentPane.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
@@ -140,6 +144,11 @@ public class Window_Main extends Window_Mother {
 			
 			panelDisk = new Panel_Disk();
 			panelRow4.add(panelDisk);
+			
+		panelRow5 = new JPanel();
+			panelRow5.setLayout(new BoxLayout(panelRow5, BoxLayout.X_AXIS));
+			
+			panelRow5.add(panelGantt);
 		
 		contentPane.add(panelRow1);
 		contentPane.add(Box.createVerticalStrut(20));
@@ -148,9 +157,11 @@ public class Window_Main extends Window_Mother {
 		contentPane.add(panelRow3);
 		contentPane.add(Box.createVerticalStrut(20));
 		contentPane.add(panelRow4);
+		contentPane.add(Box.createVerticalStrut(20));
+		contentPane.add(panelRow5);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(950,780);
+		this.setSize(950,850);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		
@@ -164,10 +175,12 @@ public class Window_Main extends Window_Mother {
 		
 		processTableRefreshData();
 		
-		if (Manager.scheduler.current == null) {
+		panelGantt.passTime();
+		
+		if (Scheduler.current == null) {
 			panelCPU.refreshPanel("---");
 		} else {
-			panelCPU.refreshPanel(Integer.toString(Manager.scheduler.current.pid));
+			panelCPU.refreshPanel(Integer.toString(Scheduler.current.pid));
 		}
 		Window_Main.this.repaint();
 	}
