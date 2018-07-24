@@ -3,15 +3,13 @@ package processSimulator;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import java.util.LinkedList;
-import java.util.Vector;
 
 public class Panel_Gantt extends JPanel {
 

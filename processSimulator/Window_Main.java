@@ -157,8 +157,8 @@ public class Window_Main extends Window_Mother {
 		contentPane.add(panelRow3);
 		contentPane.add(Box.createVerticalStrut(20));
 		contentPane.add(panelRow4);
-		contentPane.add(Box.createVerticalStrut(20));
-		contentPane.add(panelRow5);
+		//contentPane.add(Box.createVerticalStrut(20));
+		//contentPane.add(panelRow5);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(950,850);

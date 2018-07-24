@@ -11,12 +11,14 @@ public class Scheduler_EDF extends Scheduler{
 		super();
 		queue = new PriorityQueue<Integer>(10, comparator);
 		
+		/*
 		add(1, 20, 40, 0, 0);
 		add(2, 18, 36, 0, 0);
 		add(3, 24, 48, 4, 0);
 		add(4, 16, 32, 0, 0);
 		add(5, 21, 42, 3, 0);
 		add(6, 11, 22, 0, 0);
+		*/
 
 	}
 	
@@ -31,6 +33,7 @@ public class Scheduler_EDF extends Scheduler{
 		} else {
 			Manager.swapper.fetchPages(current);			
 			current.timeleft--;
+			current.lastTime = Manager.time;
 			Manager.swapper.pageLoop(current);
 			
 			if (current.timeleft <= 0) {

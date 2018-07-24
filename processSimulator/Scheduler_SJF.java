@@ -11,12 +11,14 @@ public class Scheduler_SJF extends Scheduler{
 		super();
 		queue = new PriorityQueue<Integer>(10, comparator);
 		
+		/*
 		add(1, 20, 0, 4, 0);
 		add(2, 18, 0, 0, 0);
 		add(3, 24, 0, 0, 0);
 		add(4, 16, 0, 0, 0);
 		add(5, 21, 0, 0, 0);
 		add(6, 11, 0, 0, 0);
+		*/
 		
 	}
 	

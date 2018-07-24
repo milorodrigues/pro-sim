@@ -57,7 +57,7 @@ public class Scheduler {
 	
 	public void add(int pid, int duration, int deadline, int priority, int delay) {
 		
-		Process newprocess = new Process(pid, duration, 0, priority, delay);
+		Process newprocess = new Process(pid, duration, deadline, priority, delay);
 		
 		list.add(newprocess);
 		queue.add(newprocess.pid); 
@@ -71,7 +71,15 @@ public class Scheduler {
 		
 		if (current != null) {
 			row = new Vector<Object>(5, 0);
-			row.add(current.pid); row.add(current.duration); row.add(current.timeleft); row.add(current.deadline); row.add(current.priority);
+			row.add(current.pid);
+			row.add(current.duration);
+			row.add(current.timeleft); 
+			if (Manager.algScheduling == "EDF") {
+				row.add(current.deadline);
+			} else {
+				row.add("---");
+			}
+			row.add(current.priority);
 			dataVec.add(row);
 		}
 		
@@ -83,7 +91,15 @@ public class Scheduler {
 			if (current != null && iteration.pid == current.pid) continue;
 			
 			row = new Vector<Object>(5, 0);
-			row.add(iteration.pid); row.add(iteration.duration); row.add(iteration.timeleft); row.add(iteration.deadline); row.add(iteration.priority);
+			row.add(iteration.pid);
+			row.add(iteration.duration);
+			row.add(iteration.timeleft);
+			if (Manager.algScheduling == "EDF") {
+				row.add(iteration.deadline);
+			} else {
+				row.add("---");
+			}
+			row.add(iteration.priority);
 			dataVec.add(row);
 		}
 		

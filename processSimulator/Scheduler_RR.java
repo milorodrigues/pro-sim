@@ -11,12 +11,14 @@ public class Scheduler_RR extends Scheduler{
 		super();
 		queue = new PriorityQueue<Integer>(10, comparator);
 		
+		/*
 		add(1, 20, 0, 0, 0);
 		add(2, 18, 0, 0, 0);
 		add(3, 24, 0, 0, 0);
 		add(4, 16, 0, 0, 0);
 		add(5, 21, 0, 0, 0);
 		add(6, 11, 0, 0, 0);
+		*/
 	}
 	
 	public void updateCurrentQuantum() {
@@ -30,6 +32,8 @@ public class Scheduler_RR extends Scheduler{
 		} else {
 			Manager.swapper.fetchPages(current);			
 			current.timeleft--;
+			current.lastTime = Manager.time;
+			System.out.println(current.pid + ".lastTime = " + current.lastTime);
 			Manager.swapper.pageLoop(current);
 			
 			if (current.timeleft <= 0) {

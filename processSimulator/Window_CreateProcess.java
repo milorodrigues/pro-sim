@@ -74,8 +74,8 @@ public class Window_CreateProcess extends Window_Mother {
 		panelFields.add(fieldPriority);
 		panelFields.add(lblDeadline);
 		panelFields.add(fieldDeadline);
-		panelFields.add(lblEntryDelay);
-		panelFields.add(fieldEntryDelay);
+		//panelFields.add(lblEntryDelay);
+		//panelFields.add(fieldEntryDelay);
 		
 		btnCreate = new JButton("Create");
 			btnCreate.setAlignmentX(CENTER_ALIGNMENT);
@@ -84,7 +84,7 @@ public class Window_CreateProcess extends Window_Mother {
 					String response;
 					if (Manager.algScheduling == "FIFO" || Manager.algScheduling == "SJF" || Manager.algScheduling == "RR") {
 						try {
-							response = Manager.scheduler.addProcess(Integer.parseInt(fieldDuration.getText()), -1, -1, Integer.parseInt(fieldEntryDelay.getText()));
+							response = Manager.scheduler.addProcess(Integer.parseInt(fieldDuration.getText()), 0, Integer.parseInt(fieldPriority.getText()), Integer.parseInt(fieldEntryDelay.getText()));
 							if (response == "full") {
 								JOptionPane.showMessageDialog(null, "Process queue is full!");
 							} else if (response == "fail") {
@@ -98,7 +98,7 @@ public class Window_CreateProcess extends Window_Mother {
 						}
 					} else if (Manager.algScheduling == "EDF") {
 						try {
-							response = Manager.scheduler.addProcess(Integer.parseInt(fieldDuration.getText()), Integer.parseInt(fieldDeadline.getText()), -1, Integer.parseInt(fieldEntryDelay.getText()));
+							response = Manager.scheduler.addProcess(Integer.parseInt(fieldDuration.getText()), Integer.parseInt(fieldDeadline.getText()), Integer.parseInt(fieldPriority.getText()), Integer.parseInt(fieldEntryDelay.getText()));
 							if (response == "full") {
 								JOptionPane.showMessageDialog(null, "Process queue is full!");
 							} else if (response == "fail") {

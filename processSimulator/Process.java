@@ -9,6 +9,8 @@ public class Process {
 	protected int priority;
 	protected int delay;
 	
+	protected int lastTime = 0;
+	
 	public static int numPages = 10;
 	
 	public Process(int pid, int duration, int deadline, int priority, int delay) {
