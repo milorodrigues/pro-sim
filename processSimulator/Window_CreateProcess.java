@@ -56,11 +56,10 @@ public class Window_CreateProcess extends Window_Mother {
 			
 			fieldDuration = new JTextField("1");
 			
-			fieldPriority = new JTextField("1");
+			fieldPriority = new JTextField("0");
 			
 			fieldDeadline = new JTextField("1");
 				if (Manager.algScheduling == "FIFO" || Manager.algScheduling == "SJF") {
-					fieldPriority.setText(""); fieldPriority.setEnabled(false);
 					fieldDeadline.setText(""); fieldDeadline.setEnabled(false);
 				}
 				
